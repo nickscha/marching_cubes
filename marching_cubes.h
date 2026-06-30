@@ -1,4 +1,4 @@
-/* marching_cubes.h - v0.1 - public domain data structures - nickscha 2026
+/* marching_cubes.h - v0.2 - public domain data structures - nickscha 2026
 
 C89, single header, nostdlib marching cubes algorithm
 
