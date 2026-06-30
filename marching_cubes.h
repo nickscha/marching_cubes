@@ -457,13 +457,16 @@ MARCHING_CUBES_API void marching_cubes_generate(
   int z;
   int i;
   int j;
+
   int stride = 1 << ctx->lod_level;
   int num_cubes = ctx->dim_size - 1;
   int row_stride = ctx->dim_size;
   int sli_stride = ctx->dim_size * ctx->dim_size;
+
   float iso = ctx->iso_level;
   float scale = ctx->grid_size / (float)num_cubes;
   float offset = ctx->grid_size * 0.5f;
+
   int count = 0;
   int corner_ptrs[8];
 
