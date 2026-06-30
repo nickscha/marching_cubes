@@ -1,6 +1,8 @@
 # marching_cubes
 C89, single header, nostdlib marching cubes algorithm
 
+This is currently a 'naive' implementation focussing only on the marching cubes triangulation part and does not cover sophisticated LOD stiching and transition like transvoxel yet.
+
 For more information please look at the "marching_cubes.h" file or take a look at the "examples" or "tests" folder.
 
 > [!WARNING]
@@ -40,11 +42,6 @@ int main() {
     return 0;
 }
 ```
-
-## Run Example: nostdlib, freestsanding
-
-In this repo you will find the "examples/marching_cubes_win32_nostdlib.c" with the corresponding "build.bat" file which
-creates an executable only linked to "kernel32" and is not using the C standard library and executes the program afterwards.
 
 ## "nostdlib" Motivation & Purpose
 
