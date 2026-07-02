@@ -37,7 +37,76 @@ Download or clone marching_cubes.h and include it in your project.
 ```C
 #include "marching_cubes.h" /* Marching Cubes */
 
+/* Simple flat plane density grid */
+static void initialize_density_grid(float *grid, int grid_dimensions, float grid_total_size, marching_cubes_vec3 grid_center)
+{
+  int x, y, z;
+
+  for (z = 0; z < grid_dimensions; ++z)
+  {
+    /*
+    float wz = (((float)z / ((float)grid_dimensions - 1.0f)) - 0.5f) * grid_total_size + grid_center.z;
+    */
+
+    for (y = 0; y < grid_dimensions; ++y)
+    {
+      float wy = (((float)y / ((float)grid_dimensions - 1.0f)) - 0.5f) * grid_total_size + grid_center.y;
+
+      for (x = 0; x < grid_dimensions; ++x)
+      {
+        /* Simple Flat plane */
+        float final_density = wy + 20.0f;
+
+        grid[z * grid_dimensions * grid_dimensions + y * grid_dimensions + x] = final_density;
+      }
+    }
+  }
+}
+
+#define DIM 129
+#define MAX_TRIANGLES (DIM * DIM * DIM * 5)
+
 int main() {
+    float *density_grid;
+
+    marching_cubes_context ctx = {0};
+
+    marching_cubes_triangle *triangle_buffer;
+    int triangle_count = 0;
+
+    density_grid = malloc(sizeof(float) * DIM * DIM * DIM);
+
+    if (!density_grid)
+    {
+      return 1;
+    }
+
+    ctx.dim_size = DIM;
+    ctx.grid_size = 100.0f; /* Total world-space size of the chunk */
+    ctx.iso_level = 0.0f;   /* The "surface" is where density is 0 */
+    ctx.chunk_coord.x = 0.0f;
+    ctx.chunk_coord.y = 0.0f;
+    ctx.chunk_coord.z = 0.0f;
+    ctx.density_grid = density_grid;
+    ctx.transition_mask = 0;
+    ctx.lod_level = 0;
+
+    triangle_buffer = malloc(sizeof(marching_cubes_triangle) * MAX_TRIANGLES);
+
+    if (!triangle_buffer)
+    {
+      return 1;
+    }
+
+    /* Fill density grid */
+    initialize_density_grid(density_grid, DIM, ctx.grid_size, ctx.chunk_coord);
+
+    /* Calculate Marching Cubes Triangles from density grid */
+    marching_cubes_generate(&ctx, triangle_buffer, &triangle_count);
+
+    if (triangle_count < 1) {
+      return 1;
+    }    
 
     return 0;
 }
